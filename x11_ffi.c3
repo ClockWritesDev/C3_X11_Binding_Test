@@ -1,49 +1,46 @@
 module linux::x11;
 
 //Display functions
-extern fn Display* x11_XOpenDisplay(char* display_name) @extern("XOpenDisplay");
-extern fn void x11_XCloseDisplay(Display* display) @extern("XCloseDisplay");
-extern fn Card64 x11_XAllPlanes() @extern("XAllPlanes");
-extern fn Card64 x11_XBlackPixel(Display* display, Int32 screen_number) @extern("XBlackPixel");
-extern fn Card64 x11_WhitePixel(Display* display, Int32 screen_number) @extern("WhitePixel");
-extern fn Int32 x11_XConnectionNumber(Display* display) @extern("XConnectionNumber");
-extern fn ColorMap x11_XDefaultColormap(Display* display, Int32 screen_number) @extern("XDefaultColormap");
-extern fn ZString x11_XDisplayString(Display* display) @extern("XDisplayString");
-extern fn Int32 x11_XScreenCount(Display* display) @extern("XScreenCount");
-extern fn Screen x11_XDefaultScreen(Display* display) @extern("XDefaultScreen");
-extern fn Int32 x11_XDisplayWidth(Display* display, Int32 screen_number) @extern("XDisplayWidth");
-extern fn Int32 x11_XDisplayHeight(Display* display, Int32 screen_number) @extern("XDisplayHeight");
+extern fn XDisplay* openDisplay(ZString display_name) @cname("XOpenDisplay");
+extern fn void closeDisplay(XDisplay* display) @cname("XCloseDisplay");
+extern fn Card64 allPlanes() @cname("XAllPlanes");
+extern fn Card64 blackPixel(XDisplay* display, Int32 screen_number) @cname("XBlackPixel");
+extern fn Card64 whitePixel(XDisplay* display, Int32 screen_number) @cname("XWhitePixel");
+extern fn Int32 connectionNumber(XDisplay* display) @cname("XConnectionNumber");
+extern fn XColorMap defaultColormap(XDisplay* display, Int32 screen_number) @cname("XDefaultColormap");
+extern fn ZString displayString(XDisplay* display) @cname("XDisplayString");
+extern fn Int32 screenCount(XDisplay* display) @cname("XScreenCount");
+extern fn XScreen defaultScreen(XDisplay* display) @cname("XDefaultScreen");
+extern fn Int32 displayWidth(XDisplay* display, Int32 screen_number) @cname("XDisplayWidth");
+extern fn Int32 displayHeight(XDisplay* display, Int32 screen_number) @cname("XDisplayHeight");
 
-//Window functions
-extern fn Window x11_DefaultRootWindow(Display* display) @extern("XDefaultRootWindow");
-extern fn Window x11_XRootWindow(Display* display, Int32 screen_number) @extern("XRootWindow");
-extern fn Window x11_XCreateWindow(Display* display, Window parent, Int32 x, Int32 y, Card64 width, Card64 height, 
-    Card64 border_width, Int32 depth, Card32 class, Visual* visual, Card64 value_mask, XSetWindowAttributes* attributes) @extern("XCreateWindow");
-extern fn Window x11_XCreateSimpleWindow(Display* display, Window parent, Int32 x, Int32 y, Card64 width, Card64 height, 
-    Card64 border_width, Card64 border, Card64 background) @extern("XCreateSimpleWindow");
-extern fn void x11_XMapWindow(Display* display, Window window) @extern("XMapWindow");
-extern fn void x11_XUnmapWindow(Display* display, Window window) @extern("XUnmapWindow");
-extern fn void x11_XChangeWindowAttributes(Display* display, Window window, Card32 valuemask, XSetWindowAttributes* attributes) @extern("XChangeWindowAttributes");
-extern fn void x11_XSetWindowBackground(Display* display, Window window, Card32 background_pixel) @extern("XSetWindowBackground");
-extern fn void x11_XSetWindowBorder(Display* display, Window window, Card64 border_pixel) @extern("XSetWindowBorder");
-extern fn void x11_XSetWindowColormap(Display* display, Window window, ColorMap color_map) @extern("XSetWindowColormap");
-extern fn void x11_XDefineCursor(Display* display, Window window, Cursor cursor) @extern("XDefineCursor");
-extern fn void x11_XUndefineCursor(Display* display, Window window) @extern("XUndefineCursor");
-extern fn void x11_XDestroyWindow(Display* display, Window window) @extern("XDestroyWindow");
-extern fn void x11_XDestroySubwindows(Display* display, Window window) @extern("XDestroySubwindows");
+extern fn XWindow defaultRootWindow(XDisplay* display) @cname("XDefaultRootWindow");
+extern fn XWindow rootWindow(XDisplay* display, Int32 screen_number) @cname("XRootWindow");
+extern fn XWindow createWindow(XDisplay* display, XWindow parent, Int32 x, Int32 y, Card64 width, Card64 height, 
+    Card64 border_width, Int32 depth, Card32 class, XVisual* visual, Card64 value_mask, XSetWindowAttributes* attributes) @cname("XCreateWindow");
+extern fn XWindow createSimpleWindow(XDisplay* display, XWindow parent, Int32 x, Int32 y, Card64 width, Card64 height, 
+    Card64 border_width, Card64 border, Card64 background) @cname("XCreateSimpleWindow");
+extern fn void mapWindow(XDisplay* display, XWindow window) @cname("XMapWindow");
+extern fn void unmapWindow(XDisplay* display, XWindow window) @cname("XUnmapWindow");
+extern fn void changeWindowAttributes(XDisplay* display, XWindow window, Card32 valuemask, XSetWindowAttributes* attributes) @cname("XChangeWindowAttributes");
+extern fn void setWindowBackground(XDisplay* display, XWindow window, Card32 background_pixel) @cname("XSetWindowBackground");
+extern fn void setWindowBorder(XDisplay* display, XWindow window, Card64 border_pixel) @cname("XSetWindowBorder");
+extern fn void setWindowColormap(XDisplay* display, XWindow window, XColorMap color_map) @cname("XSetWindowColormap");
+extern fn void defineCursor(XDisplay* display, XWindow window, XCursor cursor) @cname("XDefineCursor");
+extern fn void undefineCursor(XDisplay* display, XWindow window) @cname("XUndefineCursor");
+extern fn void destroyWindow(XDisplay* display, XWindow window) @cname("XDestroyWindow");
+extern fn void destroySubwindows(XDisplay* display, XWindow window) @cname("XDestroySubwindows");
 
-//Events functions
-extern fn void x11_XFlush(Display* display) @extern("XFlush");
-extern fn int x11_XPending(Display* display) @extern("XPending");
-extern fn void x11_XNextEvent(Display* display, XEvent* event_return) @extern("XNextEvent");
-extern fn void x11_XWindowEvent(Display* display, Window window, Int64 event_mask, XEvent* event_return) @extern("XWindowEvent");
-extern fn void x11_XSelectInput(Display* display, Window window, Mask event_mask) @extern("XSelectInput");
-extern fn Atom x11_XInternAtom(Display* display, XPointer atom_name, Bool only_if_exists) @extern("XInternAtom");
-extern fn void x11_XMoveWindow(Display* display, Window window, Int32 x, Int32 y) @extern("XMoveWindow");
-extern fn void x11_XResizeWindow(Display* display, Window window, Card32 width, Card32 height) @extern("XResizeWindow");
-extern fn Status x11_XSetWMProtocols(Display* display, Window window, Atom* protocols, Int32 count) @extern("XSetWMProtocols");
+extern fn void flush(XDisplay* display) @cname("XFlush");
+extern fn int pending(XDisplay* display) @cname("XPending");
+extern fn void nextEvent(XDisplay* display, XEvent* event_return) @cname("XNextEvent");
+extern fn void selectInput(XDisplay* display, XWindow, XMask event_mask) @cname("XSelectInput");
+extern fn void windowEvent(XDisplay* display, XWindow window, Int64 event_mask, XEvent* event_return) @cname("XWindowEvent");
+extern fn XAtom internAtom(XDisplay* display, XPointer atom_name, Bool only_if_exists) @cname("XInternAtom");
+extern fn void moveWindow(XDisplay* display, XWindow window, Int32 x, Int32 y) @cname("XMoveWindow");
+extern fn void resizeWindow(XDisplay* display, XWindow window, Card32 width, Card32 height) @cname("XResizeWindow");
+extern fn XStatus setWMProtocols(XDisplay* display, XWindow window, XAtom* protocols, Int32 count) @cname("XSetWMProtocols");
 
-//X11 internal funcs
-extern fn Int32 x11_XProtocolVersion(Display* display) @extern("XProtocolVersion");
-extern fn Int32 x11_XProtocolRevision(Display* display) @extern("XProtocolRevision");
-extern fn void x11_XFree(void* data) @extern("XFree");
+extern fn Int32 protocolVersion(XDisplay* display) @cname("XProtocolVersion");
+extern fn Int32 protocolRevision(XDisplay* display) @cname("XProtocolRevision");
+extern fn void free(Pointer data) @cname("XFree");

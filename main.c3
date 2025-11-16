@@ -3,17 +3,17 @@ import std::io;
 
 bool quit = false;
 
-fn void closeX11Window(Display* display, Window window) {
-    x11::x11_XDestroyWindow(display, window);
-    x11::x11_XCloseDisplay(display);
+fn void closeX11Window(XDisplay* display, XWindow window) {
+    x11::destroyWindow(display, window);
+    x11::closeDisplay(display);
 }
 
 fn int main() {
-	Display* display = x11::x11_XOpenDisplay(null);
+	XDisplay* display = x11::openDisplay(null);
 
-    Window root = x11::x11_DefaultRootWindow(display);
+    XWindow root = x11::defaultRootWindow(display);
 
-    Window window = x11::x11_XCreateSimpleWindow(
+    XWindow window = x11::createSimpleWindow(
 	display,
     root,
     (Int32)0,
@@ -25,29 +25,30 @@ fn int main() {
     0xffffffff
 	);
 
-    Mask event_mask = x11::EXPOSUREMASK
-                    | x11::KEYPRESSMASK | x11::KEYRELEASEMASK
-                    | x11::BUTTONPRESSMASK | x11::BUTTONRELEASEMASK;
-    x11::x11_XSelectInput(display, window, event_mask);
-    x11::x11_XMapWindow(display, window);
+    XMask event_mask = x11::EXPOSURE_MASK
+                    | x11::KEY_PRESS_MASK | x11::KEY_RELEASE_MASK
+                    | x11::BUTTON_PRESS_MASK | x11::BUTTON_RELEASE_MASK;
+    x11::selectInput(display, window, event_mask);
+    x11::mapWindow(display, window);
 
-    Atom wm_delete_window = x11::x11_XInternAtom(display, x11::WM_DELETE_WINDOW, x11::FALSE);
-    x11::x11_XSetWMProtocols(display, window, &wm_delete_window, 1);
+    XAtom wm_delete_window = x11::internAtom(display, x11::WM_DELETE_WINDOW, x11::FALSE);
+    x11::setWMProtocols(display, window, &wm_delete_window, 1);
 
     XEvent x_events;
 
 	while (!quit) {
         //events not working properly
-        x11::x11_XNextEvent(display, &x_events);
+        x11::nextEvent(display, &x_events);
 		switch(x_events.type) {
-			case x11::KEYPRESS:
-				if (x_events.xkey.keycode == 0xff1b) {quit=true;}
+			case x11::KEY_PRESS:
+				io::printfn("%d", x_events.x_key.keycode);
+				if (x_events.x_key.keycode == 0x09) {quit=true;}
 				break;
-            case x11::CLIENTMESSAGE:
-                Atom wm_protocol = x11::x11_XInternAtom(display, x11::WM_PROTOCOLS, x11::FALSE);
+            case x11::CLIENT_MESSAGE:
+                XAtom wm_protocol = x11::internAtom(display, x11::WM_PROTOCOLS, x11::FALSE);
 
-                if (x_events.xclient.message_type == (Card64)wm_protocol && 
-                    x_events.xclient.data.l[0] == (Int64)wm_delete_window) {
+                if (x_events.x_client.message_type == (Card64)wm_protocol && 
+                    x_events.x_client.data.l[0] == (Int64)wm_delete_window) {
                     quit = true;
                 }
                 break;
